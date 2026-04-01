@@ -6,87 +6,190 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voorraadbeheersysteem</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        h1 {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
             color: #333;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 16px 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header h1 {
+            font-size: 22px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .top-bar h2 {
+            font-size: 20px;
+            color: #2c3e50;
+        }
+
+        .btn {
+            padding: 9px 16px;
+            background-color: #2c3e50;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #1a252f;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: white;
-        }
-
-        th,
-        td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
         }
 
         th {
-            background-color: #333;
+            background-color: #2c3e50;
             color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 14px;
         }
 
-        tr:hover {
-            background-color: #f0f0f0;
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
         }
 
-        .btn {
-            padding: 8px 12px;
-            background-color: #333;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f9f9f9;
+        }
+
+        .badge {
+            background-color: #eaf0fb;
+            color: #2c3e50;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
     </style>
 </head>
 
 <body>
-    <h1>📦 Voorraadbeheersysteem</h1>
-    <a href="/product/create" class="btn">+ Product toevoegen</a>
-    <br><br>
-    <table>
-        <thead>
-            <tr>
-                <th>Naam</th>
-                <th>Type</th>
-                <th>Aantal</th>
-                <th>Locatie</th>
-                <th>Categorie</th>
-                <th>Acties</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($producten as $product)
-                <tr>
-                    <td>{{ $product->Naam }}</td>
-                    <td>{{ $product->Type }}</td>
-                    <td>{{ $product->Aantal }}</td>
-                    <td>{{ $product->Locatie }}</td>
-                    <td>{{ $product->categorie->Naam ?? '-' }}</td>
-                    <td>
-                        <a href="/product/{{ $product->ProductID }}/edit" class="btn">Bewerken</a>
-                        <form action="{{ route('producten.destroy', $product->ProductID) }}" method="POST"
-                            style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn" style="border: none; cursor: pointer;"
-                                onclick="return confirm('Weet je zeker dat je dit product wilt verwijderen?')">
-                                Verwijderen
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+
+    <header>
+        <h1>📦 Voorraadbeheersysteem</h1>
+    </header>
+
+    <div class="container">
+
+        @if(session('success'))
+            <div class="alert-success">✅ {{ session('success') }}</div>
+        @endif
+
+        <div class="top-bar">
+            <h2>Producten overzicht</h2>
+            <a href="/product/create" class="btn">+ Product toevoegen</a>
+        </div>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Naam</th>
+                        <th>Type</th>
+                        <th>Aantal</th>
+                        <th>Locatie</th>
+                        <th>Categorie</th>
+                        <th>Acties</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($producten as $product)
+                        <tr>
+                            <td>{{ $product->Naam }}</td>
+                            <td>{{ $product->Type }}</td>
+                            <td>{{ $product->Aantal }}</td>
+                            <td>{{ $product->Locatie }}</td>
+                            <td><span class="badge">{{ $product->categorie->Naam ?? '-' }}</span></td>
+                            <td>
+                                <div class="actions">
+                                    <a href="/product/{{ $product->ProductID }}/edit" class="btn">Bewerken</a>
+                                    <form action="{{ route('producten.destroy', $product->ProductID) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('Weet je zeker dat je dit product wilt verwijderen?')">
+                                            Verwijderen
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
 </body>
 
 </html>
