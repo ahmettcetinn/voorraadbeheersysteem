@@ -50,7 +50,7 @@
 
 <body>
     <h1>📦 Voorraadbeheersysteem</h1>
-    <a href="#" class="btn">+ Product toevoegen</a>
+    <a href="/product/create" class="btn">+ Product toevoegen</a>
     <br><br>
     <table>
         <thead>
@@ -72,8 +72,16 @@
                     <td>{{ $product->Locatie }}</td>
                     <td>{{ $product->categorie->Naam ?? '-' }}</td>
                     <td>
-                        <a href="#" class="btn">Bewerken</a>
-                        <a href="#" class="btn">Verwijderen</a>
+                        <a href="/product/{{ $product->ProductID }}/edit" class="btn">Bewerken</a>
+                        <form action="{{ route('producten.destroy', $product->ProductID) }}" method="POST"
+                            style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn" style="border: none; cursor: pointer;"
+                                onclick="return confirm('Weet je zeker dat je dit product wilt verwijderen?')">
+                                Verwijderen
+                            </button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

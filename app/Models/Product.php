@@ -8,6 +8,7 @@ class Product extends Model
 {
     protected $table = 'Product';
     protected $primaryKey = 'ProductID';
+    public $timestamps = false;
     protected $fillable = ['Naam', 'Type', 'Aantal', 'Locatie', 'CategorieID'];
 
     public function categorie()
