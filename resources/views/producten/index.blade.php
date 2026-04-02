@@ -134,8 +134,19 @@
 
 <body>
 
-    <header>
+    <header style="display: flex; justify-content: space-between; align-items: center;">
         <h1>📦 Voorraadbeheersysteem</h1>
+
+        <div style="color: white; font-size: 14px; display: flex; align-items: center; gap: 15px;">
+            👤 {{ Auth::user()->Naam }} ({{ Auth::user()->Rol }})
+            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                @csrf
+                <button type="submit"
+                    style="background-color: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                    Uitloggen
+                </button>
+            </form>
+        </div>
     </header>
 
     <nav style="background-color: #34495e; padding: 10px 30px;">
