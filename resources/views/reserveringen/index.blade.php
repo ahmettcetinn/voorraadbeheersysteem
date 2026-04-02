@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voorraadbeheersysteem</title>
+    <title>Reserveringen - Voorraadbeheersysteem</title>
     <style>
         * {
             margin: 0;
@@ -29,6 +29,22 @@
 
         header h1 {
             font-size: 22px;
+        }
+
+        nav {
+            background-color: #34495e;
+            padding: 10px 30px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
         }
 
         .container {
@@ -116,6 +132,11 @@
             font-weight: bold;
         }
 
+        .badge-actief {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
         .actions {
             display: flex;
             gap: 8px;
@@ -124,6 +145,15 @@
         .alert-success {
             background-color: #d4edda;
             color: #155724;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
             padding: 12px 16px;
             border-radius: 6px;
             margin-bottom: 20px;
@@ -138,10 +168,9 @@
         <h1>📦 Voorraadbeheersysteem</h1>
     </header>
 
-    <nav style="background-color: #34495e; padding: 10px 30px;">
-        <a href="/" style="color: white; text-decoration: none; margin-right: 20px; font-size: 14px;">Producten</a>
-        <a href="/reserveringen"
-            style="color: white; text-decoration: none; margin-right: 20px; font-size: 14px;">Reserveringen</a>
+    <nav>
+        <a href="/">Producten</a>
+        <a href="/reserveringen">Reserveringen</a>
     </nav>
 
     <div class="container">
@@ -150,63 +179,44 @@
             <div class="alert-success">✅ {{ session('success') }}</div>
         @endif
 
+        @if(session('error'))
+            <div class="alert-error">❌ {{ session('error') }}</div>
+        @endif
+
         <div class="top-bar">
-            <h2>Producten overzicht</h2>
-            <a href="/product/create" class="btn">+ Product toevoegen</a>
+            <h2>Reserveringen overzicht</h2>
+            <a href="/reservering/create" class="btn">+ Nieuwe reservering</a>
         </div>
-
-        <!-- ZOEK EN FILTER FORMULIER -->
-        <form method="GET" action="/" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-            <input type="text" name="zoeken" placeholder="Zoek op naam, type of locatie..."
-                value="{{ request('zoeken') }}"
-                style="flex: 2; min-width: 200px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
-
-            <select name="categorie"
-                style="flex: 1; min-width: 150px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: white;">
-                <option value="">-- Alle categorieën --</option>
-                @foreach($categorieen as $categorie)
-                    <option value="{{ $categorie->CategorieID }}" {{ request('categorie') == $categorie->CategorieID ? 'selected' : '' }}>
-                        {{ $categorie->Naam }}
-                    </option>
-                @endforeach
-            </select>
-
-            <button type="submit" class="btn">Zoeken</button>
-
-            @if(request('zoeken') || request('categorie'))
-                <a href="/" class="btn btn-secondary">Reset</a>
-            @endif
-        </form>
 
         <div class="card">
             <table>
                 <thead>
                     <tr>
-                        <th>Naam</th>
-                        <th>Type</th>
+                        <th>Product</th>
+                        <th>Gebruiker</th>
                         <th>Aantal</th>
-                        <th>Locatie</th>
-                        <th>Categorie</th>
+                        <th>Datum</th>
+                        <th>Status</th>
                         <th>Acties</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($producten as $product)
+                    @foreach($reserveringen as $reservering)
                         <tr>
-                            <td>{{ $product->Naam }}</td>
-                            <td>{{ $product->Type }}</td>
-                            <td>{{ $product->Aantal }}</td>
-                            <td>{{ $product->Locatie }}</td>
-                            <td><span class="badge">{{ $product->categorie->Naam ?? '-' }}</span></td>
+                            <td>{{ $reservering->product->Naam ?? '-' }}</td>
+                            <td>{{ $reservering->gebruiker->Naam ?? '-' }}</td>
+                            <td>{{ $reservering->Aantal }}</td>
+                            <td>{{ $reservering->Datum }}</td>
+                            <td><span class="badge badge-actief">{{ $reservering->Status }}</span></td>
                             <td>
                                 <div class="actions">
-                                    <a href="/product/{{ $product->ProductID }}/edit" class="btn">Bewerken</a>
-                                    <form action="{{ route('producten.destroy', $product->ProductID) }}" method="POST">
+                                    <form action="{{ route('reserveringen.destroy', $reservering->ReserveringID) }}"
+                                        method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Weet je zeker dat je dit product wilt verwijderen?')">
-                                            Verwijderen
+                                            onclick="return confirm('Weet je zeker dat je deze reservering wilt annuleren?')">
+                                            Annuleren
                                         </button>
                                     </form>
                                 </div>
