@@ -8,10 +8,31 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $producten = Product::with('categorie')->get();
-        return view('producten.index', compact('producten'));
+        $query = Product::with('categorie');
+
+        // Search by name, type, or location
+        if ($request->filled('zoeken')) {
+            $zoekterm = $request->zoeken;
+            $query->where(function ($q) use ($zoekterm) {
+                $q->where('Naam', 'LIKE', '%' . $zoekterm . '%')
+                    ->orWhere('Type', 'LIKE', '%' . $zoekterm . '%')
+                    ->orWhere('Locatie', 'LIKE', '%' . $zoekterm . '%');
+            });
+        }
+
+        // Filter by category
+        if ($request->filled('categorie')) {
+            $query->where('CategorieID', $request->categorie);
+        }
+
+        $producten = $query->get();
+
+        // Get all categories for the dropdown
+        $categorieen = Categorie::all();
+
+        return view('producten.index', compact('producten', 'categorieen'));
     }
 
     public function edit($id)

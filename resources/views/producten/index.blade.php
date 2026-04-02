@@ -149,6 +149,29 @@
             <a href="/product/create" class="btn">+ Product toevoegen</a>
         </div>
 
+        <!-- ZOEK EN FILTER FORMULIER -->
+        <form method="GET" action="/" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <input type="text" name="zoeken" placeholder="Zoek op naam, type of locatie..."
+                value="{{ request('zoeken') }}"
+                style="flex: 2; min-width: 200px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+
+            <select name="categorie"
+                style="flex: 1; min-width: 150px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: white;">
+                <option value="">-- Alle categorieën --</option>
+                @foreach($categorieen as $categorie)
+                    <option value="{{ $categorie->CategorieID }}" {{ request('categorie') == $categorie->CategorieID ? 'selected' : '' }}>
+                        {{ $categorie->Naam }}
+                    </option>
+                @endforeach
+            </select>
+
+            <button type="submit" class="btn">Zoeken</button>
+
+            @if(request('zoeken') || request('categorie'))
+                <a href="/" class="btn btn-secondary">Reset</a>
+            @endif
+        </form>
+
         <div class="card">
             <table>
                 <thead>
