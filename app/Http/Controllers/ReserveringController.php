@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservering;
 use App\Models\Product;
-use App\Models\Gebruiker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReserveringController extends Controller
 {
@@ -20,7 +20,7 @@ class ReserveringController extends Controller
     public function create()
     {
         $producten = Product::all();
-        $gebruikers = Gebruiker::all();
+        $gebruikers = \App\Models\Gebruiker::all();
         return view('reserveringen.create', compact('producten', 'gebruikers'));
     }
 
@@ -54,6 +54,13 @@ class ReserveringController extends Controller
     public function destroy($id)
     {
         $reservering = Reservering::findOrFail($id);
+
+        /** @var \App\Models\Gebruiker $user */
+        $user = Auth::user();
+
+        if ($user->isStudent() && $reservering->GebruikerID !== $user->GebruikerID) {
+            abort(403, 'Je mag alleen je eigen reserveringen annuleren.');
+        }
 
         // Geef voorraad terug
         $product = Product::findOrFail($reservering->ProductID);

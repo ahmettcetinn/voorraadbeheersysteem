@@ -210,15 +210,21 @@
                             <td><span class="badge badge-actief">{{ $reservering->Status }}</span></td>
                             <td>
                                 <div class="actions">
-                                    <form action="{{ route('reserveringen.destroy', $reservering->ReserveringID) }}"
-                                        method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Weet je zeker dat je deze reservering wilt annuleren?')">
-                                            Annuleren
-                                        </button>
-                                    </form>
+                                    {{-- Docent mag alles annuleren --}}
+                                    {{-- Student mag alleen eigen reserveringen annuleren --}}
+                                    @if(Auth::user()->isDocent() || $reservering->GebruikerID === Auth::user()->GebruikerID)
+                                        <form action="{{ route('reserveringen.destroy', $reservering->ReserveringID) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger"
+                                                onclick="return confirm('Weet je zeker dat je deze reservering wilt annuleren?')">
+                                                Annuleren
+                                            </button>
+                                        </form>
+                                    @else
+                                        <span style="color: #999; font-size: 12px;">Niet jouw reservering</span>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

@@ -163,7 +163,9 @@
 
         <div class="top-bar">
             <h2>Producten overzicht</h2>
-            <a href="/product/create" class="btn">+ Product toevoegen</a>
+            @if(Auth::user()->isDocent())
+                <a href="/product/create" class="btn">+ Product toevoegen</a>
+            @endif
         </div>
 
         <!-- ZOEK EN FILTER FORMULIER -->
@@ -211,15 +213,19 @@
                             <td><span class="badge">{{ $product->categorie->Naam ?? '-' }}</span></td>
                             <td>
                                 <div class="actions">
-                                    <a href="/product/{{ $product->ProductID }}/edit" class="btn">Bewerken</a>
-                                    <form action="{{ route('producten.destroy', $product->ProductID) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Weet je zeker dat je dit product wilt verwijderen?')">
-                                            Verwijderen
-                                        </button>
-                                    </form>
+                                    @if(Auth::user()->isDocent())
+                                        <a href="/product/{{ $product->ProductID }}/edit" class="btn">Bewerken</a>
+                                        <form action="{{ route('producten.destroy', $product->ProductID) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger"
+                                                onclick="return confirm('Weet je zeker dat je dit product wilt verwijderen?')">
+                                                Verwijderen
+                                            </button>
+                                        </form>
+                                    @else
+                                        <span style="color: #999; font-size: 12px;">Alleen bekijken</span>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
