@@ -120,7 +120,7 @@
             <h2>➕ Product Toevoegen</h2>
 
             <form action="/product" method="POST" enctype="multipart/form-data">
-                @csrf
+                <?php echo csrf_field(); ?>
 
                 <label>Naam</label>
                 <input type="text" name="Naam" required>
@@ -137,9 +137,9 @@
                 <label>Categorie</label>
                 <select name="CategorieID">
                     <option value="">-- Kies een categorie --</option>
-                    @foreach($categorieen as $categorie)
-                        <option value="{{ $categorie->CategorieID }}">{{ $categorie->Naam }}</option>
-                    @endforeach
+                    <?php $__currentLoopData = $categorieen; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($categorie->CategorieID); ?>"><?php echo e($categorie->Naam); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
 
                 <label>Afbeelding</label>
@@ -161,4 +161,4 @@
 
 </body>
 
-</html>
+</html><?php /**PATH C:\Users\ahmet\Desktop\voorraadbeheersysteem\resources\views/producten/create.blade.php ENDPATH**/ ?>

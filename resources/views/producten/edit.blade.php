@@ -119,7 +119,7 @@
         <div class="card">
             <h2>✏️ Product Bewerken</h2>
 
-            <form method="POST" action="/product/{{ $product->ProductID }}">
+            <form action="/product/{{ $product->ProductID }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -143,6 +143,21 @@
                         </option>
                     @endforeach
                 </select>
+
+                <label>Afbeelding</label>
+                @if($product->Afbeelding)
+                    <div style="margin-bottom: 10px;">
+                        <img src="{{ asset($product->Afbeelding) }}" alt="Huidige afbeelding"
+                            style="max-width: 150px; border-radius: 6px;">
+                        <p style="font-size: 12px; color: #666;">Huidige afbeelding</p>
+                    </div>
+                @endif
+                <input type="file" name="Afbeelding" accept="image/*"
+                    style="padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
+
+                <label>Beschrijving</label>
+                <textarea name="Beschrijving" rows="3" placeholder="Beschrijving van het product..."
+                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: #fafafa;">{{ $product->Beschrijving }}</textarea>
 
                 <div class="btn-group">
                     <button type="submit" class="btn">Opslaan</button>

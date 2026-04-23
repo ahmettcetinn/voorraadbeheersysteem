@@ -168,9 +168,9 @@
         <h1>📦 Voorraadbeheersysteem</h1>
 
         <div style="color: white; font-size: 14px; display: flex; align-items: center; gap: 15px;">
-            👤 {{ Auth::user()->Naam }} ({{ Auth::user()->Rol }})
-            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                @csrf
+            👤 <?php echo e(Auth::user()->Naam); ?> (<?php echo e(Auth::user()->Rol); ?>)
+            <form method="POST" action="<?php echo e(route('logout')); ?>" style="display: inline;">
+                <?php echo csrf_field(); ?>
                 <button type="submit"
                     style="background-color: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
                     Uitloggen
@@ -187,13 +187,13 @@
 
     <div class="container">
 
-        @if(session('success'))
-            <div class="alert-success">✅ {{ session('success') }}</div>
-        @endif
+        <?php if(session('success')): ?>
+            <div class="alert-success">✅ <?php echo e(session('success')); ?></div>
+        <?php endif; ?>
 
-        @if(session('error'))
-            <div class="alert-error">❌ {{ session('error') }}</div>
-        @endif
+        <?php if(session('error')): ?>
+            <div class="alert-error">❌ <?php echo e(session('error')); ?></div>
+        <?php endif; ?>
 
         <div class="top-bar">
             <h2>Reserveringen overzicht</h2>
@@ -213,34 +213,34 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($reserveringen as $reservering)
+                    <?php $__currentLoopData = $reserveringen; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reservering): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td>{{ $reservering->product->Naam ?? '-' }}</td>
-                            <td>{{ $reservering->gebruiker->Naam ?? '-' }}</td>
-                            <td>{{ $reservering->Aantal }}</td>
-                            <td>{{ $reservering->Datum }}</td>
-                            <td><span class="badge badge-actief">{{ $reservering->Status }}</span></td>
+                            <td><?php echo e($reservering->product->Naam ?? '-'); ?></td>
+                            <td><?php echo e($reservering->gebruiker->Naam ?? '-'); ?></td>
+                            <td><?php echo e($reservering->Aantal); ?></td>
+                            <td><?php echo e($reservering->Datum); ?></td>
+                            <td><span class="badge badge-actief"><?php echo e($reservering->Status); ?></span></td>
                             <td>
                                 <div class="actions">
-                                    {{-- Docent mag alles annuleren --}}
-                                    {{-- Student mag alleen eigen reserveringen annuleren --}}
-                                    @if(Auth::user()->isDocent() || $reservering->GebruikerID === Auth::user()->GebruikerID)
-                                        <form action="{{ route('reserveringen.destroy', $reservering->ReserveringID) }}"
+                                    
+                                    
+                                    <?php if(Auth::user()->isDocent() || $reservering->GebruikerID === Auth::user()->GebruikerID): ?>
+                                        <form action="<?php echo e(route('reserveringen.destroy', $reservering->ReserveringID)); ?>"
                                             method="POST">
-                                            @csrf
-                                            @method('DELETE')
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
                                             <button type="submit" class="btn btn-danger"
                                                 onclick="return confirm('Weet je zeker dat je deze reservering wilt annuleren?')">
                                                 Annuleren
                                             </button>
                                         </form>
-                                    @else
+                                    <?php else: ?>
                                         <span style="color: #999; font-size: 12px;">Niet jouw reservering</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
@@ -249,4 +249,4 @@
 
 </body>
 
-</html>
+</html><?php /**PATH C:\Users\ahmet\Desktop\voorraadbeheersysteem\resources\views/reserveringen/index.blade.php ENDPATH**/ ?>

@@ -155,40 +155,40 @@
         <div class="card">
             <h2>➕ Nieuwe Reservering</h2>
 
-            @if(session('error'))
-                <div class="alert-error">❌ {{ session('error') }}</div>
-            @endif
+            <?php if(session('error')): ?>
+                <div class="alert-error">❌ <?php echo e(session('error')); ?></div>
+            <?php endif; ?>
 
             <form action="/reservering" method="POST">
-                @csrf
+                <?php echo csrf_field(); ?>
 
                 <label>Product</label>
                 <select name="ProductID" required>
                     <option value="">-- Kies een product --</option>
-                    @foreach($producten as $product)
-                        <option value="{{ $product->ProductID }}">
-                            {{ $product->Naam }} (Beschikbaar: {{ $product->Aantal }})
+                    <?php $__currentLoopData = $producten; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($product->ProductID); ?>">
+                            <?php echo e($product->Naam); ?> (Beschikbaar: <?php echo e($product->Aantal); ?>)
                         </option>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
 
-                @if(Auth::user()->isDocent())
+                <?php if(Auth::user()->isDocent()): ?>
                     <label>Gebruiker</label>
                     <select name="GebruikerID" required>
                         <option value="">-- Kies een gebruiker --</option>
-                        @foreach($gebruikers as $gebruiker)
-                            <option value="{{ $gebruiker->GebruikerID }}">
-                                {{ $gebruiker->Naam }} ({{ $gebruiker->Rol }})
+                        <?php $__currentLoopData = $gebruikers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $gebruiker): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($gebruiker->GebruikerID); ?>">
+                                <?php echo e($gebruiker->Naam); ?> (<?php echo e($gebruiker->Rol); ?>)
                             </option>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
-                @else
-                    {{-- Student ziet alleen eigen naam, geen dropdown --}}
+                <?php else: ?>
+                    
                     <label>Reserveren voor</label>
-                    <input type="text" value="{{ Auth::user()->Naam }} ({{ Auth::user()->Rol }})" disabled
+                    <input type="text" value="<?php echo e(Auth::user()->Naam); ?> (<?php echo e(Auth::user()->Rol); ?>)" disabled
                         style="background-color: #e9ecef; cursor: not-allowed;">
-                    <input type="hidden" name="GebruikerID" value="{{ Auth::user()->GebruikerID }}">
-                @endif
+                    <input type="hidden" name="GebruikerID" value="<?php echo e(Auth::user()->GebruikerID); ?>">
+                <?php endif; ?>
 
                 <label>Aantal</label>
                 <input type="number" name="Aantal" min="1" required>
@@ -207,4 +207,4 @@
 
 </body>
 
-</html>
+</html><?php /**PATH C:\Users\ahmet\Desktop\voorraadbeheersysteem\resources\views/reserveringen/create.blade.php ENDPATH**/ ?>

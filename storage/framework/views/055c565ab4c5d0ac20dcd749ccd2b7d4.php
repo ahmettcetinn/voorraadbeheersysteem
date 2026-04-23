@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Toevoegen</title>
+    <title>Product Bewerken</title>
     <style>
         * {
             margin: 0;
@@ -117,38 +117,48 @@
 
     <div class="container">
         <div class="card">
-            <h2>➕ Product Toevoegen</h2>
+            <h2>✏️ Product Bewerken</h2>
 
-            <form action="/product" method="POST" enctype="multipart/form-data">
-                @csrf
+            <form action="/product/<?php echo e($product->ProductID); ?>" method="POST" enctype="multipart/form-data">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
 
                 <label>Naam</label>
-                <input type="text" name="Naam" required>
+                <input type="text" name="Naam" value="<?php echo e($product->Naam); ?>" required>
 
                 <label>Type</label>
-                <input type="text" name="Type" required>
+                <input type="text" name="Type" value="<?php echo e($product->Type); ?>" required>
 
                 <label>Aantal</label>
-                <input type="number" name="Aantal" required>
+                <input type="number" name="Aantal" value="<?php echo e($product->Aantal); ?>" required>
 
                 <label>Locatie</label>
-                <input type="text" name="Locatie" required>
+                <input type="text" name="Locatie" value="<?php echo e($product->Locatie); ?>" required>
 
                 <label>Categorie</label>
                 <select name="CategorieID">
-                    <option value="">-- Kies een categorie --</option>
-                    @foreach($categorieen as $categorie)
-                        <option value="{{ $categorie->CategorieID }}">{{ $categorie->Naam }}</option>
-                    @endforeach
+                    <?php $__currentLoopData = $categorieen; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($categorie->CategorieID); ?>" <?php echo e($product->CategorieID == $categorie->CategorieID ? 'selected' : ''); ?>>
+                            <?php echo e($categorie->Naam); ?>
+
+                        </option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
 
                 <label>Afbeelding</label>
+                <?php if($product->Afbeelding): ?>
+                    <div style="margin-bottom: 10px;">
+                        <img src="<?php echo e(asset($product->Afbeelding)); ?>" alt="Huidige afbeelding"
+                            style="max-width: 150px; border-radius: 6px;">
+                        <p style="font-size: 12px; color: #666;">Huidige afbeelding</p>
+                    </div>
+                <?php endif; ?>
                 <input type="file" name="Afbeelding" accept="image/*"
                     style="padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
 
                 <label>Beschrijving</label>
                 <textarea name="Beschrijving" rows="3" placeholder="Beschrijving van het product..."
-                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: #fafafa;"></textarea>
+                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: #fafafa;"><?php echo e($product->Beschrijving); ?></textarea>
 
                 <div class="btn-group">
                     <button type="submit" class="btn">Opslaan</button>
@@ -161,4 +171,4 @@
 
 </body>
 
-</html>
+</html><?php /**PATH C:\Users\ahmet\Desktop\voorraadbeheersysteem\resources\views/producten/edit.blade.php ENDPATH**/ ?>

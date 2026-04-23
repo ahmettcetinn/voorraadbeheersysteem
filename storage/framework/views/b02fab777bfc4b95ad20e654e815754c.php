@@ -138,9 +138,9 @@
         <h1>📦 Voorraadbeheersysteem</h1>
 
         <div style="color: white; font-size: 14px; display: flex; align-items: center; gap: 15px;">
-            👤 {{ Auth::user()->Naam }} ({{ Auth::user()->Rol }})
-            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                @csrf
+            👤 <?php echo e(Auth::user()->Naam); ?> (<?php echo e(Auth::user()->Rol); ?>)
+            <form method="POST" action="<?php echo e(route('logout')); ?>" style="display: inline;">
+                <?php echo csrf_field(); ?>
                 <button type="submit"
                     style="background-color: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
                     Uitloggen
@@ -157,38 +157,39 @@
 
     <div class="container">
 
-        @if(session('success'))
-            <div class="alert-success">✅ {{ session('success') }}</div>
-        @endif
+        <?php if(session('success')): ?>
+            <div class="alert-success">✅ <?php echo e(session('success')); ?></div>
+        <?php endif; ?>
 
         <div class="top-bar">
             <h2>Producten overzicht</h2>
-            @if(Auth::user()->isDocent())
+            <?php if(Auth::user()->isDocent()): ?>
                 <a href="/product/create" class="btn">+ Product toevoegen</a>
-            @endif
+            <?php endif; ?>
         </div>
 
         <!-- ZOEK EN FILTER FORMULIER -->
         <form method="GET" action="/" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
             <input type="text" name="zoeken" placeholder="Zoek op naam, type of locatie..."
-                value="{{ request('zoeken') }}"
+                value="<?php echo e(request('zoeken')); ?>"
                 style="flex: 2; min-width: 200px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
 
             <select name="categorie"
                 style="flex: 1; min-width: 150px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: white;">
                 <option value="">-- Alle categorieën --</option>
-                @foreach($categorieen as $categorie)
-                    <option value="{{ $categorie->CategorieID }}" {{ request('categorie') == $categorie->CategorieID ? 'selected' : '' }}>
-                        {{ $categorie->Naam }}
+                <?php $__currentLoopData = $categorieen; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categorie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($categorie->CategorieID); ?>" <?php echo e(request('categorie') == $categorie->CategorieID ? 'selected' : ''); ?>>
+                        <?php echo e($categorie->Naam); ?>
+
                     </option>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
 
             <button type="submit" class="btn">Zoeken</button>
 
-            @if(request('zoeken') || request('categorie'))
+            <?php if(request('zoeken') || request('categorie')): ?>
                 <a href="/" class="btn btn-secondary">Reset</a>
-            @endif
+            <?php endif; ?>
         </form>
 
         <div class="card">
@@ -205,58 +206,59 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($producten as $product)
+                    <?php $__currentLoopData = $producten; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
                             <td>
                                 <div style="display: flex; align-items: center; gap: 10px;">
-                                    @if($product->Afbeelding)
-                                        <img src="{{ asset($product->Afbeelding) }}" alt="{{ $product->Naam }}"
+                                    <?php if($product->Afbeelding): ?>
+                                        <img src="<?php echo e(asset($product->Afbeelding)); ?>" alt="<?php echo e($product->Naam); ?>"
                                             style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">
-                                    @else
+                                    <?php else: ?>
                                         <div
                                             style="width: 40px; height: 40px; background-color: #e9ecef; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px;">
                                             📦</div>
-                                    @endif
-                                    <a href="/product/{{ $product->ProductID }}/detail"
+                                    <?php endif; ?>
+                                    <a href="/product/<?php echo e($product->ProductID); ?>/detail"
                                         style="color: #2c3e50; text-decoration: none; font-weight: bold;">
-                                        {{ $product->Naam }}
+                                        <?php echo e($product->Naam); ?>
+
                                     </a>
                                 </div>
                             </td>
-                            <td>{{ $product->Type }}</td>
-                            <td>{{ $product->Aantal }}</td>
-                            <td>{{ $product->Locatie }}</td>
-                            <td><span class="badge">{{ $product->categorie->Naam ?? '-' }}</span></td>
+                            <td><?php echo e($product->Type); ?></td>
+                            <td><?php echo e($product->Aantal); ?></td>
+                            <td><?php echo e($product->Locatie); ?></td>
+                            <td><span class="badge"><?php echo e($product->categorie->Naam ?? '-'); ?></span></td>
                             <td>
                                 <div class="actions">
-                                    @if(Auth::user()->isDocent())
-                                        <a href="/product/{{ $product->ProductID }}/edit" class="btn">Bewerken</a>
-                                        <form action="{{ route('producten.destroy', $product->ProductID) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
+                                    <?php if(Auth::user()->isDocent()): ?>
+                                        <a href="/product/<?php echo e($product->ProductID); ?>/edit" class="btn">Bewerken</a>
+                                        <form action="<?php echo e(route('producten.destroy', $product->ProductID)); ?>" method="POST">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
                                             <button type="submit" class="btn btn-danger"
                                                 onclick="return confirm('Weet je zeker dat je dit product wilt verwijderen?')">
                                                 Verwijderen
                                             </button>
                                         </form>
-                                    @else
+                                    <?php else: ?>
                                         <span style="color: #999; font-size: 12px;">Alleen bekijken</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </td>
                             <td>
-                                @if($product->isGereserveerd)
+                                <?php if($product->isGereserveerd): ?>
                                     <span class="badge" style="background-color: #f8d7da; color: #721c24;">
-                                        🔴 Gereserveerd ({{ $product->gereserveerdAantal }})
+                                        🔴 Gereserveerd (<?php echo e($product->gereserveerdAantal); ?>)
                                     </span>
-                                @else
+                                <?php else: ?>
                                     <span class="badge" style="background-color: #d4edda; color: #155724;">
                                         🟢 Beschikbaar
                                     </span>
-                                @endif
+                                <?php endif; ?>
                             </td>
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
@@ -265,4 +267,4 @@
 
 </body>
 
-</html>
+</html><?php /**PATH C:\Users\ahmet\Desktop\voorraadbeheersysteem\resources\views/producten/index.blade.php ENDPATH**/ ?>

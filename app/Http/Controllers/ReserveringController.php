@@ -20,7 +20,15 @@ class ReserveringController extends Controller
     public function create()
     {
         $producten = Product::all();
-        $gebruikers = \App\Models\Gebruiker::all();
+
+        // Alleen docent mag voor andere mensen reserveren
+        // Student mag alleen voor zichzelf
+        if (Auth::user()->isStudent()) {
+            $gebruikers = null; // Student krijgt geen lijst
+        } else {
+            $gebruikers = \App\Models\Gebruiker::all(); // Docent krijgt alle gebruikers
+        }
+
         return view('reserveringen.create', compact('producten', 'gebruikers'));
     }
 
@@ -34,10 +42,19 @@ class ReserveringController extends Controller
             return back()->with('error', 'Niet genoeg voorraad! Beschikbaar: ' . $product->Aantal);
         }
 
+        // Bepaal voor wie de reservering is
+        if (Auth::user()->isStudent()) {
+            // Student mag alleen voor zichzelf reserveren
+            $gebruikerID = Auth::user()->GebruikerID;
+        } else {
+            // Docent mag voor iedereen reserveren (uit formulier)
+            $gebruikerID = $request->GebruikerID;
+        }
+
         // Maak reservering aan
         Reservering::create([
             'ProductID' => $request->ProductID,
-            'GebruikerID' => $request->GebruikerID,
+            'GebruikerID' => $gebruikerID,
             'Aantal' => $request->Aantal,
             'Datum' => $request->Datum,
             'Status' => 'actief',
@@ -58,6 +75,8 @@ class ReserveringController extends Controller
         /** @var \App\Models\Gebruiker $user */
         $user = Auth::user();
 
+        // Check: student mag alleen eigen reservering annuleren
+        // Docent mag alles annuleren
         if ($user->isStudent() && $reservering->GebruikerID !== $user->GebruikerID) {
             abort(403, 'Je mag alleen je eigen reserveringen annuleren.');
         }

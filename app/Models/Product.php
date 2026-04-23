@@ -9,7 +9,15 @@ class Product extends Model
     protected $table = 'Product';
     protected $primaryKey = 'ProductID';
     public $timestamps = false;
-    protected $fillable = ['Naam', 'Type', 'Aantal', 'Locatie', 'CategorieID'];
+    protected $fillable = [
+        'Naam',
+        'Type',
+        'Aantal',
+        'Locatie',
+        'CategorieID',
+        'Afbeelding',      // ← NIEUW
+        'Beschrijving',    // ← NIEUW
+    ];
 
     public function categorie()
     {
