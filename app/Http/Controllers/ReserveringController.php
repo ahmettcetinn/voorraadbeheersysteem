@@ -34,11 +34,17 @@ class ReserveringController extends Controller
 
     public function store(Request $request)
     {
-        // Check of er genoeg producten op voorraad zijn
         $product = Product::findOrFail($request->ProductID);
 
-        if ($product->Aantal < $request->Aantal) {
-            return back()->with('error', 'Niet genoeg voorraad! Beschikbaar: ' . $product->Aantal);
+        // FIX: Bereken echt beschikbaar aantal (totaal minus actief gereserveerd)
+        $gereserveerdAantal = Reservering::where('ProductID', $product->ProductID)
+            ->where('Status', 'actief')
+            ->sum('Aantal');
+
+        $beschikbaar = $product->Aantal - $gereserveerdAantal;
+
+        if ($beschikbaar < $request->Aantal) {
+            return back()->with('error', 'Niet genoeg beschikbaar! Beschikbaar: ' . $beschikbaar);
         }
 
         // Bepaal voor wie de reservering is
@@ -55,7 +61,7 @@ class ReserveringController extends Controller
             'Aantal' => $request->Aantal,
             'Datum' => $request->Datum,
             'Status' => 'actief',
-            'Doel' => $request->Doel,  // ← NIEUW
+            'Doel' => $request->Doel,
         ]);
 
         // Verminder voorraad
@@ -86,6 +92,11 @@ class ReserveringController extends Controller
 
         $reservering->delete();
 
+        // FIX: Student gaat naar eigen account, docent naar alle reserveringen
+        if ($user->isStudent()) {
+            return redirect()->route('mijn.account')->with('success', 'Reservering geannuleerd!');
+        }
+
         return redirect()->route('reserveringen.index')->with('success', 'Reservering geannuleerd!');
     }
 
@@ -102,5 +113,4 @@ class ReserveringController extends Controller
 
         return view('reserveringen.mijn-account', compact('reserveringen'));
     }
-
 }

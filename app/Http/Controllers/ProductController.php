@@ -132,7 +132,8 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return redirect('/')->with('success', 'Product bijgewerkt!');
+        // FIX: Redirect naar producten lijst (niet naar homepage)
+        return redirect()->route('producten.index')->with('success', 'Product bijgewerkt!');
     }
 
     public function destroy($id)
