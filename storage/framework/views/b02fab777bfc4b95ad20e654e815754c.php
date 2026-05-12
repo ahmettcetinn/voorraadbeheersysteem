@@ -153,6 +153,7 @@
         <a href="/" style="color: white; text-decoration: none; margin-right: 20px; font-size: 14px;">Producten</a>
         <a href="/reserveringen"
             style="color: white; text-decoration: none; margin-right: 20px; font-size: 14px;">Reserveringen</a>
+        <a href="/mijn-account">Mijn Account</a>
     </nav>
 
     <div class="container">

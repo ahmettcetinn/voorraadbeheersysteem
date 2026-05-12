@@ -32,12 +32,16 @@ class Gebruiker extends Authenticatable
     }
 
     // Check of gebruiker docent is
-    public function isDocent()
+    public function isAdmin()
     {
-        return $this->Rol === 'docent';
+        return $this->Rol === 'admin';
     }
 
-    // Check of gebruiker student is
+    public function isDocent()
+    {
+        return $this->Rol === 'docent' || $this->Rol === 'admin'; // Admin mag ook docent dingen doen
+    }
+
     public function isStudent()
     {
         return $this->Rol === 'student';

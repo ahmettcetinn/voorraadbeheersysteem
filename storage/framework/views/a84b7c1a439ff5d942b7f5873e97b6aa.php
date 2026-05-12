@@ -183,6 +183,7 @@
         <a href="/" style="color: white; text-decoration: none; margin-right: 20px; font-size: 14px;">Producten</a>
         <a href="/reserveringen"
             style="color: white; text-decoration: none; margin-right: 20px; font-size: 14px;">Reserveringen</a>
+        <a href="/mijn-account">Mijn Account</a>
     </nav>
 
     <div class="container">
@@ -210,13 +211,20 @@
                         <th>Datum</th>
                         <th>Status</th>
                         <th>Acties</th>
+                        <th>Doel</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $__currentLoopData = $reserveringen; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reservering): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
                             <td><?php echo e($reservering->product->Naam ?? '-'); ?></td>
-                            <td><?php echo e($reservering->gebruiker->Naam ?? '-'); ?></td>
+                            <td>
+                                <a href="/gebruiker/<?php echo e($reservering->gebruiker->GebruikerID); ?>"
+                                    style="color: #2c3e50; text-decoration: none; font-weight: bold;">
+                                    <?php echo e($reservering->gebruiker->Naam ?? '-'); ?>
+
+                                </a>
+                            </td>
                             <td><?php echo e($reservering->Aantal); ?></td>
                             <td><?php echo e($reservering->Datum); ?></td>
                             <td><span class="badge badge-actief"><?php echo e($reservering->Status); ?></span></td>
@@ -239,6 +247,7 @@
                                     <?php endif; ?>
                                 </div>
                             </td>
+                            <td><?php echo e(Str::limit($reservering->Doel ?? '-', 30)); ?></td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>

@@ -32,7 +32,6 @@ class ReserveringController extends Controller
         return view('reserveringen.create', compact('producten', 'gebruikers'));
     }
 
-    // Sla nieuwe reservering op
     public function store(Request $request)
     {
         // Check of er genoeg producten op voorraad zijn
@@ -44,10 +43,8 @@ class ReserveringController extends Controller
 
         // Bepaal voor wie de reservering is
         if (Auth::user()->isStudent()) {
-            // Student mag alleen voor zichzelf reserveren
             $gebruikerID = Auth::user()->GebruikerID;
         } else {
-            // Docent mag voor iedereen reserveren (uit formulier)
             $gebruikerID = $request->GebruikerID;
         }
 
@@ -58,6 +55,7 @@ class ReserveringController extends Controller
             'Aantal' => $request->Aantal,
             'Datum' => $request->Datum,
             'Status' => 'actief',
+            'Doel' => $request->Doel,  // ← NIEUW
         ]);
 
         // Verminder voorraad
@@ -90,4 +88,19 @@ class ReserveringController extends Controller
 
         return redirect()->route('reserveringen.index')->with('success', 'Reservering geannuleerd!');
     }
+
+    // Mijn reserveringen overzicht
+    public function mijnAccount()
+    {
+        /** @var \App\Models\Gebruiker $user */
+        $user = Auth::user();
+
+        $reserveringen = Reservering::with('product')
+            ->where('GebruikerID', $user->GebruikerID)
+            ->orderBy('ReserveringID', 'desc')
+            ->get();
+
+        return view('reserveringen.mijn-account', compact('reserveringen'));
+    }
+
 }

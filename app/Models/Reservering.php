@@ -18,7 +18,8 @@ class Reservering extends Model
         'GebruikerID',
         'Aantal',
         'Datum',
-        'Status'
+        'Status',
+        'Doel',  // ← NIEUW
     ];
 
     // Relatie naar Product

@@ -250,6 +250,7 @@
     <nav>
         <a href="/">← Terug naar producten</a>
         <a href="/reserveringen">Reserveringen</a>
+        <a href="/mijn-account">Mijn Account</a>
     </nav>
 
     <div class="container">

@@ -145,6 +145,10 @@
             <button type="submit" class="btn">Inloggen</button>
         </form>
 
+        <div class="link">
+            Nog geen account? <a href="<?php echo e(route('register')); ?>">Registreren</a>
+        </div>
+
         <div class="info-box">
             <strong>Test accounts:</strong><br>
             Docent: jan@school.nl / docent123<br>

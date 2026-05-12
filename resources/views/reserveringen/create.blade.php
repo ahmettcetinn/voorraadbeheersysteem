@@ -196,6 +196,10 @@
                 <label>Datum</label>
                 <input type="date" name="Datum" required>
 
+                <label>Waarvoor heb je dit nodig? (Doel/Beschrijving)</label>
+                <textarea name="Doel" rows="3" placeholder="Bijv: Ik ga een weerstation maken voor mijn PWS project..."
+                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: #fafafa;"></textarea>
+
                 <div class="btn-group">
                     <button type="submit" class="btn">Reserveren</button>
                     <a href="/reserveringen" class="btn btn-secondary">Annuleren</a>

@@ -183,6 +183,7 @@
         <a href="/" style="color: white; text-decoration: none; margin-right: 20px; font-size: 14px;">Producten</a>
         <a href="/reserveringen"
             style="color: white; text-decoration: none; margin-right: 20px; font-size: 14px;">Reserveringen</a>
+        <a href="/mijn-account">Mijn Account</a>
     </nav>
 
     <div class="container">
@@ -210,13 +211,19 @@
                         <th>Datum</th>
                         <th>Status</th>
                         <th>Acties</th>
+                        <th>Doel</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($reserveringen as $reservering)
                         <tr>
                             <td>{{ $reservering->product->Naam ?? '-' }}</td>
-                            <td>{{ $reservering->gebruiker->Naam ?? '-' }}</td>
+                            <td>
+                                <a href="/gebruiker/{{ $reservering->gebruiker->GebruikerID }}"
+                                    style="color: #2c3e50; text-decoration: none; font-weight: bold;">
+                                    {{ $reservering->gebruiker->Naam ?? '-' }}
+                                </a>
+                            </td>
                             <td>{{ $reservering->Aantal }}</td>
                             <td>{{ $reservering->Datum }}</td>
                             <td><span class="badge badge-actief">{{ $reservering->Status }}</span></td>
@@ -239,6 +246,7 @@
                                     @endif
                                 </div>
                             </td>
+                            <td>{{ Str::limit($reservering->Doel ?? '-', 30) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
