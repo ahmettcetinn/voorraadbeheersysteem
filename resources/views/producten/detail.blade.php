@@ -487,8 +487,8 @@
                     @if($product->gereserveerdAantal >= $product->Aantal && $product->Aantal > 0)
                         <span class="badge badge-danger">🔴 Volledig gereserveerd</span>
                     @elseif($product->gereserveerdAantal > 0)
-                        <span class="badge badge-warning">🟡 Gedeeltelijk gereserveerd — {{ $beschikbaar }} va
-                            n {{ $product->Aantal }} vrij</span>
+                        <span class="badge badge-warning">🟡 Gedeeltelijk gereserveerd — {{ $beschikbaar }} van
+                            {{ $product->Aantal }} vrij</span>
                     @else
                         <span class="badge badge-success">🟢 Volledig beschikbaar — {{ $product->Aantal }} stuks</span>
                     @endif
@@ -523,7 +523,8 @@
                         @if(Auth::user()->isDocent())
                             <a href="/product/{{ $product->ProductID }}/edit" class="btn btn-primary">✏️ Bewerken</a>
                         @else
-                            <a href="/reservering/create" class="btn btn-accent">+ Reserveren</a>
+                            <a href="/reservering/create?product={{ $product->ProductID }}" class="btn btn-accent">+
+                                Reserveren</a>
                         @endif
                     </div>
                 </div>

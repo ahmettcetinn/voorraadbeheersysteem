@@ -5,7 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reserveringen - Voorraadbeheersysteem</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <style>
+        :root {
+            --navy: #0f1e2e;
+            --navy-mid: #1a3248;
+            --navy-light: #243d56;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-500: #64748b;
+            --gray-700: #334155;
+            --white: #ffffff;
+            --text: #1e293b;
+            --radius: 10px;
+            --radius-sm: 6px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,86 +37,227 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--gray-50);
+            color: var(--text);
         }
 
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 16px 30px;
+        .header {
+            background: var(--navy);
+            padding: 0 32px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .header-brand-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .header-brand-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+        }
+
+        .header-avatar {
+            width: 30px;
+            height: 30px;
+            background: var(--navy-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--white);
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .role-pill {
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .role-admin {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        .role-docent {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+
+        .role-student {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+        }
+
+        .btn-logout {
+            padding: 6px 14px;
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .nav {
+            background: var(--navy-mid);
+            padding: 0 32px;
+            display: flex;
+            gap: 2px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .nav a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 14px;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover {
+            color: var(--white);
+        }
+
+        .nav a.active {
+            color: var(--white);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--navy-mid);
+        }
+
+        .btn-danger {
+            background: var(--danger-light);
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .btn-danger:hover {
+            background: #fecaca;
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 12px;
+        }
+
+        .alert {
+            padding: 13px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        header h1 {
-            font-size: 22px;
+        .alert-success {
+            background: var(--success-light);
+            color: #065f46;
+            border-left: 3px solid var(--success);
         }
 
-        nav {
-            background-color: #34495e;
-            padding: 10px 30px;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-right: 20px;
-            font-size: 14px;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .top-bar h2 {
-            font-size: 20px;
-            color: #2c3e50;
-        }
-
-        .btn {
-            padding: 9px 16px;
-            background-color: #2c3e50;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .btn:hover {
-            background-color: #1a252f;
-        }
-
-        .btn-danger {
-            background-color: #e74c3c;
-        }
-
-        .btn-danger:hover {
-            background-color: #c0392b;
+        .alert-error {
+            background: var(--danger-light);
+            color: #991b1b;
+            border-left: 3px solid var(--danger);
         }
 
         .card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
             overflow: hidden;
         }
 
@@ -102,103 +267,122 @@
         }
 
         th {
-            background-color: #2c3e50;
-            color: white;
-            padding: 12px 16px;
+            padding: 11px 16px;
             text-align: left;
-            font-size: 14px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
         }
 
         td {
-            padding: 12px 16px;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 13px 16px;
             font-size: 14px;
+            border-bottom: 1px solid var(--gray-100);
+            vertical-align: middle;
         }
 
         tr:last-child td {
             border-bottom: none;
         }
 
-        tr:hover td {
-            background-color: #f9f9f9;
+        tbody tr:hover td {
+            background: var(--gray-50);
         }
 
         .badge {
-            background-color: #eaf0fb;
-            color: #2c3e50;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
             padding: 3px 10px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 600;
         }
 
-        .badge-actief {
-            background-color: #d4edda;
-            color: #155724;
+        .badge-success {
+            background: var(--success-light);
+            color: #065f46;
         }
 
-        .actions {
-            display: flex;
-            gap: 8px;
+        .user-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
         }
 
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 14px;
+        .user-link:hover {
+            color: var(--accent);
+            text-decoration: underline;
         }
 
-        .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 14px;
+        .doel-text {
+            color: var(--gray-700);
+            font-size: 13px;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .muted {
+            color: var(--gray-500);
+            font-size: 13px;
         }
     </style>
 </head>
 
 <body>
 
-    <header style="display: flex; justify-content: space-between; align-items: center;">
-        <h1>📦 Voorraadbeheersysteem</h1>
-
-        <div style="color: white; font-size: 14px; display: flex; align-items: center; gap: 15px;">
-            👤 <?php echo e(Auth::user()->Naam); ?> (<?php echo e(Auth::user()->Rol); ?>)
-            <form method="POST" action="<?php echo e(route('logout')); ?>" style="display: inline;">
+    <header class="header">
+        <a href="/" class="header-brand">
+            <div class="header-brand-icon">📦</div>
+            <span class="header-brand-name">Voorraadbeheersysteem</span>
+        </a>
+        <div class="header-right">
+            <div class="header-user">
+                <div class="header-avatar"><?php echo e(substr(Auth::user()->Naam, 0, 1)); ?></div>
+                <span><?php echo e(Auth::user()->Naam); ?></span>
+                <?php if(Auth::user()->Rol === 'admin'): ?>
+                    <span class="role-pill role-admin">Admin</span>
+                <?php elseif(Auth::user()->Rol === 'docent'): ?>
+                    <span class="role-pill role-docent">Docent</span>
+                <?php else: ?>
+                    <span class="role-pill role-student">Student</span>
+                <?php endif; ?>
+            </div>
+            <form method="POST" action="<?php echo e(route('logout')); ?>">
                 <?php echo csrf_field(); ?>
-                <button type="submit"
-                    style="background-color: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
-                    Uitloggen
-                </button>
+                <button type="submit" class="btn-logout">Uitloggen</button>
             </form>
         </div>
     </header>
 
-    <nav style="background-color: #34495e; padding: 10px 30px;">
-        <a href="/" style="color: white; text-decoration: none; margin-right: 20px; font-size: 14px;">Producten</a>
-        <a href="/reserveringen"
-            style="color: white; text-decoration: none; margin-right: 20px; font-size: 14px;">Reserveringen</a>
-        <a href="/mijn-account">Mijn Account</a>
+    <nav class="nav">
+        <a href="/">📦 Producten</a>
+        <a href="/reserveringen" class="active">📋 Reserveringen</a>
+        <a href="/mijn-account">👤 Mijn Account</a>
+        <a href="/documentatie">📖 Documentatie</a>
     </nav>
 
     <div class="container">
 
         <?php if(session('success')): ?>
-            <div class="alert-success">✅ <?php echo e(session('success')); ?></div>
+            <div class="alert alert-success">✅ <?php echo e(session('success')); ?></div>
         <?php endif; ?>
-
         <?php if(session('error')): ?>
-            <div class="alert-error">❌ <?php echo e(session('error')); ?></div>
+            <div class="alert alert-error">❌ <?php echo e(session('error')); ?></div>
         <?php endif; ?>
 
-        <div class="top-bar">
-            <h2>Reserveringen overzicht</h2>
-            <a href="/reservering/create" class="btn">+ Nieuwe reservering</a>
+        <div class="page-header">
+            <div>
+                <div class="page-title">Reserveringen</div>
+                <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Alle actieve reserveringen</div>
+            </div>
+            <a href="/reservering/create" class="btn btn-primary">+ Nieuwe reservering</a>
         </div>
 
         <div class="card">
@@ -209,51 +393,49 @@
                         <th>Gebruiker</th>
                         <th>Aantal</th>
                         <th>Datum</th>
-                        <th>Status</th>
-                        <th>Acties</th>
                         <th>Doel</th>
+                        <th>Status</th>
+                        <th>Actie</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $__currentLoopData = $reserveringen; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reservering): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td><?php echo e($reservering->product->Naam ?? '-'); ?></td>
                             <td>
-                                <a href="/gebruiker/<?php echo e($reservering->gebruiker->GebruikerID); ?>"
-                                    style="color: #2c3e50; text-decoration: none; font-weight: bold;">
+                                <a href="/product/<?php echo e($reservering->product->ProductID ?? ''); ?>/detail"
+                                    style="color:var(--text);font-weight:600;text-decoration:none;">
+                                    <?php echo e($reservering->product->Naam ?? '-'); ?>
+
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/gebruiker/<?php echo e($reservering->gebruiker->GebruikerID ?? ''); ?>" class="user-link">
                                     <?php echo e($reservering->gebruiker->Naam ?? '-'); ?>
 
                                 </a>
                             </td>
-                            <td><?php echo e($reservering->Aantal); ?></td>
-                            <td><?php echo e($reservering->Datum); ?></td>
-                            <td><span class="badge badge-actief"><?php echo e($reservering->Status); ?></span></td>
+                            <td style="font-family:'DM Mono',monospace;"><?php echo e($reservering->Aantal); ?>x</td>
+                            <td class="muted"><?php echo e($reservering->Datum); ?></td>
+                            <td><span class="doel-text"
+                                    title="<?php echo e($reservering->Doel); ?>"><?php echo e($reservering->Doel ?? '—'); ?></span></td>
+                            <td><span class="badge badge-success">● <?php echo e($reservering->Status); ?></span></td>
                             <td>
-                                <div class="actions">
-                                    
-                                    
-                                    <?php if(Auth::user()->isDocent() || $reservering->GebruikerID === Auth::user()->GebruikerID): ?>
-                                        <form action="<?php echo e(route('reserveringen.destroy', $reservering->ReserveringID)); ?>"
-                                            method="POST">
-                                            <?php echo csrf_field(); ?>
-                                            <?php echo method_field('DELETE'); ?>
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Weet je zeker dat je deze reservering wilt annuleren?')">
-                                                Annuleren
-                                            </button>
-                                        </form>
-                                    <?php else: ?>
-                                        <span style="color: #999; font-size: 12px;">Niet jouw reservering</span>
-                                    <?php endif; ?>
-                                </div>
+                                <?php if(Auth::user()->isDocent() || $reservering->GebruikerID === Auth::user()->GebruikerID): ?>
+                                    <form action="<?php echo e(route('reserveringen.destroy', $reservering->ReserveringID)); ?>"
+                                        method="POST">
+                                        <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Reservering annuleren?')">Annuleren</button>
+                                    </form>
+                                <?php else: ?>
+                                    <span class="muted">—</span>
+                                <?php endif; ?>
                             </td>
-                            <td><?php echo e(Str::limit($reservering->Doel ?? '-', 30)); ?></td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
-
     </div>
 
 </body>

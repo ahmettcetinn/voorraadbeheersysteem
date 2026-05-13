@@ -279,12 +279,22 @@
                     <select name="ProductID" required>
                         <option value="">— Kies een product —</option>
                         @foreach($producten as $product)
-                            <option value="{{ $product->ProductID }}">
+                            <option value="{{ $product->ProductID }}" {{ request('product') == $product->ProductID ? 'selected' : '' }}>
                                 {{ $product->Naam }} — {{ $product->Aantal }} beschikbaar
                             </option>
                         @endforeach
                     </select>
                 </div>
+                @if(request("product"))
+                    @php $gekozenProduct = $producten->firstWhere("ProductID", request("product")); @endphp
+                    @if($gekozenProduct)
+                        <div
+                            style="margin-bottom:18px;padding:12px 14px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;font-size:13px;color:#1d4ed8;">
+                            📦 Je reserveert: <strong>{{ $gekozenProduct->Naam }}</strong> — {{ $gekozenProduct->Aantal }} stuks
+                            beschikbaar
+                        </div>
+                    @endif
+                @endif
 
                 <div class="form-row">
                     <div class="form-group" style="margin-bottom:0;">

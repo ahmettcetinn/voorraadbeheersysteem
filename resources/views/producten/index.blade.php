@@ -466,6 +466,7 @@
         @if(Auth::user()->isDocent())
             <a href="/reserveringen">📋 Reserveringen</a>
         @endif
+        <a href="/reservering/create">➕ Reserveren</a>
         <a href="/mijn-account">👤 Mijn Account</a>
         <a href="/documentatie">📖 Documentatie</a>
     </nav>
