@@ -4,8 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $product->Naam }} - Detail</title>
+    <title>{{ $product->Naam }} - Voorraadbeheersysteem</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <style>
+        :root {
+            --navy: #0f1e2e;
+            --navy-mid: #1a3248;
+            --navy-light: #243d56;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-light: #eff6ff;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-500: #64748b;
+            --gray-700: #334155;
+            --white: #ffffff;
+            --text: #1e293b;
+            --radius: 10px;
+            --radius-sm: 6px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,357 +41,532 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--gray-50);
+            color: var(--text);
         }
 
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 16px 30px;
+        .header {
+            background: var(--navy);
+            padding: 0 32px;
+            height: 60px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        header h1 {
-            font-size: 22px;
-        }
-
-        nav {
-            background-color: #34495e;
-            padding: 10px 30px;
-        }
-
-        nav a {
-            color: white;
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             text-decoration: none;
-            margin-right: 20px;
-            font-size: 14px;
         }
 
-        nav a:hover {
-            text-decoration: underline;
+        .header-brand-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .header-brand-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+        }
+
+        .header-avatar {
+            width: 30px;
+            height: 30px;
+            background: var(--navy-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--white);
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .role-pill {
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .role-admin {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        .role-docent {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fcd34d;
+        }
+
+        .role-student {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+        }
+
+        .btn-logout {
+            padding: 6px 14px;
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .nav {
+            background: var(--navy-mid);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .nav a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 14px;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover {
+            color: var(--white);
         }
 
         .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 0 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border-radius: var(--radius-sm);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--navy-mid);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        .btn-accent:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
         }
 
         .card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 30px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 20px;
         }
 
+        .card-body {
+            padding: 28px;
+        }
+
+        .alert {
+            padding: 13px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--success);
+            background: var(--success-light);
+            color: #065f46;
+        }
+
+        /* Product header layout */
         .product-header {
             display: flex;
-            gap: 20px;
-            margin-bottom: 24px;
+            gap: 28px;
+            align-items: flex-start;
             flex-wrap: wrap;
+        }
+
+        .product-image-wrap {
+            flex-shrink: 0;
         }
 
         .product-image {
             width: 200px;
             height: 200px;
             object-fit: cover;
-            border-radius: 10px;
-            background-color: #e9ecef;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .product-placeholder {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
-            flex-shrink: 0;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
+            font-size: 64px;
         }
 
         .product-info {
             flex: 1;
-            min-width: 250px;
+            min-width: 220px;
         }
 
-        .product-info h2 {
-            font-size: 24px;
-            color: #2c3e50;
+        .product-name {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
             margin-bottom: 10px;
         }
 
         .badge {
-            padding: 5px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: 13px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 10px;
+            font-weight: 600;
+            margin-bottom: 18px;
         }
 
-        .badge-beschikbaar {
-            background-color: #d4edda;
-            color: #155724;
+        .badge-success {
+            background: var(--success-light);
+            color: #065f46;
         }
 
-        .badge-gereserveerd {
-            background-color: #f8d7da;
-            color: #721c24;
+        .badge-warning {
+            background: var(--warning-light);
+            color: #92400e;
         }
 
-        .badge-gedeeltelijk {
-            background-color: #fff3cd;
-            color: #856404;
+        .badge-danger {
+            background: var(--danger-light);
+            color: #991b1b;
         }
 
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 16px;
         }
 
         .info-item {
-            background-color: #f8f9fa;
-            padding: 15px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-100);
+            padding: 12px 14px;
             border-radius: 8px;
         }
 
-        .info-item label {
-            font-size: 12px;
-            color: #666;
+        .info-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-500);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
             display: block;
         }
 
-        .info-item p {
-            font-size: 16px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-top: 5px;
+        .info-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            margin-top: 4px;
+            display: block;
+            font-family: 'DM Mono', monospace;
         }
 
-        .btn {
-            padding: 10px 20px;
-            background-color: #2c3e50;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
+        .description-box {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--accent-light);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .description-box p {
             font-size: 14px;
-            border: none;
-            cursor: pointer;
-            display: inline-block;
-            transition: background-color 0.2s;
+            line-height: 1.7;
+            color: var(--gray-700);
         }
 
-        .btn:hover {
-            background-color: #1a252f;
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+            flex-wrap: wrap;
         }
 
-        .btn-danger {
-            background-color: #e74c3c;
+        /* History table */
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
-
-        .btn-success {
-            background-color: #27ae60;
-        }
-
-        .btn-success:hover {
-            background-color: #219a52;
-        }
-
-        .reserveringen-table {
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
         }
 
-        .reserveringen-table th {
-            background-color: #34495e;
-            color: white;
-            padding: 10px;
+        th {
+            padding: 10px 14px;
             text-align: left;
-            font-size: 13px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
         }
 
-        .reserveringen-table td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            font-size: 13px;
-        }
-
-        .geen-reserveringen {
-            color: #666;
-            font-style: italic;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 20px;
+        td {
+            padding: 12px 14px;
             font-size: 14px;
+            border-bottom: 1px solid var(--gray-100);
+            vertical-align: middle;
         }
 
-        @media (max-width: 600px) {
-            .product-header {
-                flex-direction: column;
-                align-items: center;
-            }
+        tr:last-child td {
+            border-bottom: none;
+        }
 
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
+        tbody tr:hover td {
+            background: var(--gray-50);
+        }
+
+        .status-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .dot-green {
+            color: var(--success);
+        }
+
+        .muted {
+            color: var(--gray-500);
+            font-size: 13px;
+            font-style: italic;
+            text-align: center;
+            padding: 24px;
         }
     </style>
 </head>
 
 <body>
 
-    <header>
-        <h1>📦 Voorraadbeheersysteem</h1>
-        <div style="color: white; font-size: 14px; display: flex; align-items: center; gap: 15px;">
-            👤 {{ Auth::user()->Naam }} ({{ Auth::user()->Rol }})
-            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+    <header class="header">
+        <a href="/" class="header-brand">
+            <div class="header-brand-icon">📦</div>
+            <span class="header-brand-name">Voorraadbeheersysteem</span>
+        </a>
+        <div class="header-right">
+            <div class="header-user">
+                <div class="header-avatar">{{ substr(Auth::user()->Naam, 0, 1) }}</div>
+                <span>{{ Auth::user()->Naam }}</span>
+                @if(Auth::user()->Rol === 'admin')
+                    <span class="role-pill role-admin">Admin</span>
+                @elseif(Auth::user()->Rol === 'docent')
+                    <span class="role-pill role-docent">Docent</span>
+                @else
+                    <span class="role-pill role-student">Student</span>
+                @endif
+            </div>
+            <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit"
-                    style="background-color: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;">
-                    Uitloggen
-                </button>
+                <button type="submit" class="btn-logout">Uitloggen</button>
             </form>
         </div>
     </header>
 
-    <nav>
-        <a href="/">← Terug naar producten</a>
-        <a href="/reserveringen">Reserveringen</a>
-        <a href="/mijn-account">Mijn Account</a>
+    <nav class="nav">
+        <a href="/">← Producten</a>
+        @if(Auth::user()->isDocent())
+            <a href="/reserveringen">📋 Reserveringen</a>
+        @endif
+        <a href="/mijn-account">👤 Mijn Account</a>
+        <a href="/documentatie">📖 Documentatie</a>
     </nav>
 
     <div class="container">
 
         @if(session('success'))
-            <div class="alert-success">✅ {{ session('success') }}</div>
+            <div class="alert">✅ {{ session('success') }}</div>
         @endif
 
-        <div class="card">
+        <div class="card card-body">
             <div class="product-header">
-                <div class="product-image">
+                <div class="product-image-wrap">
                     @if($product->Afbeelding)
-                        <img src="{{ asset($product->Afbeelding) }}" alt="{{ $product->Naam }}">
+                        <img src="{{ asset($product->Afbeelding) }}" alt="{{ $product->Naam }}" class="product-image">
                     @else
-                        📦
+                        <div class="product-placeholder">📦</div>
                     @endif
                 </div>
                 <div class="product-info">
-                    <h2>{{ $product->Naam }}</h2>
+                    <div class="product-name">{{ $product->Naam }}</div>
 
-                    @if($product->gereserveerdAantal > 0 && $product->gereserveerdAantal < $product->Aantal)
-                        <span class="badge badge-gedeeltelijk">
-                            🟡 Gedeeltelijk gereserveerd ({{ $product->gereserveerdAantal }}/{{ $product->Aantal }})
-                        </span>
-                    @elseif($product->isGereserveerd && $product->gereserveerdAantal >= $product->Aantal)
-                        <span class="badge badge-gereserveerd">
-                            🔴 Volledig gereserveerd ({{ $product->gereserveerdAantal }})
-                        </span>
+                    @php $beschikbaar = $product->Aantal - $product->gereserveerdAantal; @endphp
+                    @if($product->gereserveerdAantal >= $product->Aantal && $product->Aantal > 0)
+                        <span class="badge badge-danger">🔴 Volledig gereserveerd</span>
+                    @elseif($product->gereserveerdAantal > 0)
+                        <span class="badge badge-warning">🟡 Gedeeltelijk gereserveerd — {{ $beschikbaar }} va
+                            n {{ $product->Aantal }} vrij</span>
                     @else
-                        <span class="badge badge-beschikbaar">
-                            🟢 Volledig beschikbaar ({{ $product->Aantal }} stuks)
-                        </span>
+                        <span class="badge badge-success">🟢 Volledig beschikbaar — {{ $product->Aantal }} stuks</span>
                     @endif
 
                     <div class="info-grid">
                         <div class="info-item">
-                            <label>Type</label>
-                            <p>{{ $product->Type }}</p>
+                            <span class="info-label">Type</span>
+                            <span class="info-value">{{ $product->Type }}</span>
                         </div>
                         <div class="info-item">
-                            <label>Categorie</label>
-                            <p>{{ $product->categorie->Naam ?? '-' }}</p>
+                            <span class="info-label">Categorie</span>
+                            <span class="info-value">{{ $product->categorie->Naam ?? '-' }}</span>
                         </div>
                         <div class="info-item">
-                            <label>Locatie</label>
-                            <p>{{ $product->Locatie }}</p>
+                            <span class="info-label">Locatie</span>
+                            <span class="info-value">{{ $product->Locatie }}</span>
                         </div>
                         <div class="info-item">
-                            <label>Voorraad</label>
-                            <p>{{ $product->Aantal }} stuks</p>
+                            <span class="info-label">Voorraad</span>
+                            <span class="info-value">{{ $product->Aantal }} stuks</span>
                         </div>
+                    </div>
+
+                    @if($product->Beschrijving)
+                        <div class="description-box">
+                            <p>{{ $product->Beschrijving }}</p>
+                        </div>
+                    @endif
+
+                    <div class="action-row">
+                        <a href="/" class="btn btn-secondary">← Terug</a>
+                        @if(Auth::user()->isDocent())
+                            <a href="/product/{{ $product->ProductID }}/edit" class="btn btn-primary">✏️ Bewerken</a>
+                        @else
+                            <a href="/reservering/create" class="btn btn-accent">+ Reserveren</a>
+                        @endif
                     </div>
                 </div>
             </div>
-
-            @if($product->Beschrijving)
-                <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
-                    <label
-                        style="font-size: 12px; color: #666; text-transform: uppercase; display: block;">Beschrijving</label>
-                    <p style="margin-top: 8px; line-height: 1.6;">{{ $product->Beschrijving }}</p>
-                </div>
-            @endif
-
-            <div style="margin-top: 30px;">
-                <h3 style="font-size: 18px; color: #2c3e50; margin-bottom: 15px;">📋 Reserveringsgeschiedenis</h3>
-
-                @if($reserveringen->count() > 0)
-                    <table class="reserveringen-table">
-                        <thead>
-                            <tr>
-                                <th>Gebruiker</th>
-                                <th>Aantal</th>
-                                <th>Datum</th>
-                                <th>Status</th>
-                                <th>Doel</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($reserveringen as $res)
-                                <tr>
-                                    <td>{{ $res->gebruiker->Naam ?? '-' }}</td>
-                                    <td>{{ $res->Aantal }}</td>
-                                    <td>{{ $res->Datum }}</td>
-                                    <td>{{ $res->Doel ?? '-' }}</td>
-                                    <td>
-                                        @if($res->Status == 'actief')
-                                            <span style="color: #27ae60; font-weight: bold;">● Actief</span>
-                                        @else
-                                            <span style="color: #e74c3c;">{{ $res->Status }}</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                @else
-                    <p class="geen-reserveringen">Nog geen reserveringen voor dit product</p>
-                @endif
-            </div>
-
-            <div
-                style="margin-top: 30px; text-align: center; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                <a href="/" class="btn">← Terug naar overzicht</a>
-
-                @if(Auth::user()->isDocent())
-                    <a href="/product/{{ $product->ProductID }}/edit" class="btn">✏️ Bewerken</a>
-                @else
-                    <a href="/reservering/create" class="btn btn-success">+ Reserveren</a>
-                @endif
-            </div>
         </div>
-    </div>
 
+        <div class="card card-body">
+            <div class="section-title">📋 Reserveringsgeschiedenis</div>
+            @if($reserveringen->count() > 0)
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Gebruiker</th>
+                            <th>Aantal</th>
+                            <th>Datum</th>
+                            <th>Doel</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($reserveringen as $res)
+                            <tr>
+                                <td><strong>{{ $res->gebruiker->Naam ?? '-' }}</strong></td>
+                                <td>{{ $res->Aantal }}x</td>
+                                <td>{{ $res->Datum }}</td>
+                                <td style="color:var(--gray-700);">{{ $res->Doel ?? '-' }}</td>
+                                <td>
+                                    @if($res->Status == 'actief')
+                                        <span class="status-dot dot-green">● Actief</span>
+                                    @else
+                                        <span style="color:var(--gray-500);">{{ $res->Status }}</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @else
+                <p class="muted">Nog geen reserveringen voor dit product.</p>
+            @endif
+        </div>
+
+    </div>
 </body>
 
 </html>

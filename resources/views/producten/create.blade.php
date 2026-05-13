@@ -4,8 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Toevoegen</title>
+    <title>Product Toevoegen - Voorraadbeheersysteem</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --navy: #0f1e2e;
+            --navy-mid: #1a3248;
+            --navy-light: #243d56;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-500: #64748b;
+            --gray-700: #334155;
+            --white: #ffffff;
+            --text: #1e293b;
+            --radius: 10px;
+            --radius-sm: 6px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,148 +32,284 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--gray-50);
+            color: var(--text);
         }
 
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 16px 30px;
+        .header {
+            background: var(--navy);
+            padding: 0 32px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-brand {
             display: flex;
             align-items: center;
             gap: 10px;
+            text-decoration: none;
         }
 
-        header h1 {
-            font-size: 22px;
+        .header-brand-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .header-brand-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .nav {
+            background: var(--navy-mid);
+            padding: 0 32px;
+            display: flex;
+            gap: 2px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .nav a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 14px;
+            transition: color 0.2s;
+        }
+
+        .nav a:hover {
+            color: var(--white);
         }
 
         .container {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 0 20px;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 3px;
         }
 
         .card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 30px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+            padding: 28px;
         }
 
-        .card h2 {
-            font-size: 20px;
-            color: #2c3e50;
-            margin-bottom: 24px;
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 18px;
         }
 
         label {
             display: block;
-            font-size: 14px;
-            font-weight: bold;
-            color: #555;
-            margin-bottom: 6px;
-            margin-top: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 7px;
         }
 
         input,
-        select {
+        select,
+        textarea {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 10px 13px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
             font-size: 14px;
-            background-color: #fafafa;
-            transition: border-color 0.2s;
+            color: var(--text);
+            background: var(--gray-50);
+            transition: all 0.2s;
         }
 
         input:focus,
-        select:focus {
+        select:focus,
+        textarea:focus {
             outline: none;
-            border-color: #2c3e50;
-            background-color: white;
+            border-color: var(--accent);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.10);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .file-input-wrap {
+            position: relative;
+        }
+
+        input[type="file"] {
+            padding: 8px;
+            background: var(--gray-50);
+            cursor: pointer;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--gray-100);
+            margin: 24px 0;
         }
 
         .btn-group {
             display: flex;
             gap: 10px;
-            margin-top: 24px;
         }
 
         .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             padding: 10px 20px;
-            background-color: #2c3e50;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
+            border-radius: var(--radius-sm);
+            font-family: 'DM Sans', sans-serif;
             font-size: 14px;
-            border: none;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s;
+            text-decoration: none;
+            border: none;
+            transition: all 0.2s;
         }
 
-        .btn:hover {
-            background-color: #1a252f;
+        .btn-primary {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--navy-mid);
         }
 
         .btn-secondary {
-            background-color: #95a5a6;
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-200);
         }
 
         .btn-secondary:hover {
-            background-color: #7f8c8d;
+            background: var(--gray-200);
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--gray-100);
         }
     </style>
 </head>
 
 <body>
 
-    <header>
-        <h1>📦 Voorraadbeheersysteem</h1>
+    <header class="header">
+        <a href="/" class="header-brand">
+            <div class="header-brand-icon">📦</div>
+            <span class="header-brand-name">Voorraadbeheersysteem</span>
+        </a>
     </header>
+    <nav class="nav">
+        <a href="/">← Producten</a>
+        <a href="/reserveringen">📋 Reserveringen</a>
+    </nav>
 
     <div class="container">
-        <div class="card">
-            <h2>➕ Product Toevoegen</h2>
+        <div class="page-header">
+            <div class="page-title">➕ Product toevoegen</div>
+            <div class="page-subtitle">Voeg een nieuw product toe aan de schoolvoorraad</div>
+        </div>
 
+        <div class="card">
             <form action="/product" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <label>Naam</label>
-                <input type="text" name="Naam" required>
-
-                <label>Type</label>
-                <input type="text" name="Type" required>
-
-                <label>Aantal</label>
-                <input type="number" name="Aantal" required>
-
-                <label>Locatie</label>
-                <input type="text" name="Locatie" required>
-
-                <label>Categorie</label>
-                <select name="CategorieID">
-                    <option value="">-- Kies een categorie --</option>
-                    @foreach($categorieen as $categorie)
-                        <option value="{{ $categorie->CategorieID }}">{{ $categorie->Naam }}</option>
-                    @endforeach
-                </select>
-
-                <label>Afbeelding</label>
-                <input type="file" name="Afbeelding" accept="image/*"
-                    style="padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
-
-                <label>Beschrijving</label>
-                <textarea name="Beschrijving" rows="3" placeholder="Beschrijving van het product..."
-                    style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background-color: #fafafa;"></textarea>
-
-                <div class="btn-group">
-                    <button type="submit" class="btn">Opslaan</button>
-                    <a href="/" class="btn btn-secondary">Annuleren</a>
+                <div class="section-label">Productinformatie</div>
+                <div class="form-row">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Naam</label>
+                        <input type="text" name="Naam" required placeholder="bv. Arduino Uno">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Type</label>
+                        <input type="text" name="Type" required placeholder="bv. Microcontroller">
+                    </div>
                 </div>
 
+                <div class="form-row" style="margin-top:18px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Aantal</label>
+                        <input type="number" name="Aantal" required min="0" placeholder="0">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Locatie</label>
+                        <input type="text" name="Locatie" required placeholder="bv. Kast A, Lade 2">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:18px;">
+                    <label>Categorie</label>
+                    <select name="CategorieID">
+                        <option value="">— Kies een categorie —</option>
+                        @foreach($categorieen as $categorie)
+                            <option value="{{ $categorie->CategorieID }}">{{ $categorie->Naam }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <hr class="divider">
+                <div class="section-label">Extra informatie</div>
+
+                <div class="form-group">
+                    <label>Beschrijving</label>
+                    <textarea name="Beschrijving" placeholder="Beschrijf het product, gebruik, specs..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Afbeelding</label>
+                    <input type="file" name="Afbeelding" accept="image/*">
+                </div>
+
+                <hr class="divider">
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">💾 Opslaan</button>
+                    <a href="/" class="btn btn-secondary">Annuleren</a>
+                </div>
             </form>
         </div>
     </div>
