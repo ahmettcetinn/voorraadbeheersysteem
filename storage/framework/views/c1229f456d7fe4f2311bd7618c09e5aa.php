@@ -285,17 +285,6 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
-                <?php if(request("product")): ?>
-                    <?php $gekozenProduct = $producten->firstWhere("ProductID", request("product")); ?>
-                    <?php if($gekozenProduct): ?>
-                        <div
-                            style="margin-bottom:18px;padding:12px 14px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;font-size:13px;color:#1d4ed8;">
-                            📦 Je reserveert: <strong><?php echo e($gekozenProduct->Naam); ?></strong> — <?php echo e($gekozenProduct->Aantal); ?> stuks
-                            beschikbaar
-                        </div>
-                    <?php endif; ?>
-                <?php endif; ?>
-
                 <div class="form-row">
                     <div class="form-group" style="margin-bottom:0;">
                         <label>Aantal</label>
